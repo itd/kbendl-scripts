@@ -7,8 +7,10 @@ wav2mp3.py
 Created by kurt on 2010-07-12.
 
 Uses ffmpeg to convert all the .wav files in a dir to mp3.
+Drops them into the ./converted directory.
 
-wav2mp3.py -s /some/src/dir -t Author-TitleOfDisk -d 03 
+usage:
+wav2mp3.py -s /some/src/dir -t Author-TitleOfDisk -d 03
 
 """
 
@@ -21,16 +23,31 @@ import fnmatch
 import shutil
 import optparse
 
+LOG_FILENAME = 'wav2mp3-conversion.log'
+if not os.path.isfile(LOG_FILENAME):
+    fpath = os.getcwd() + '/' + LOG_FILENAME
+    LOG_FILENAME = fpath
+    f = open(fpath, 'a')
+    f.close()
 
-
-#source_dir = '/web/music'
-#ffmpeg = '/usr/bin/ffmpeg'
-#ffmpeg = '/usr/local/bin/ffmpeg'
-ffmpeg = '/usr/bin/env ffmpeg'
-
-
-LOG_FILENAME = '/web/log/mp3-conversion.log'
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG,)
+
+def which(program):
+    import os
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+    fpath, fname = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+
+    return None
 
 
 def tstamp():
@@ -45,7 +62,7 @@ def getFiles(source_dir):
     return files
 
 
-def ripFiles(source_dir, files, title, disk):
+def ripFiles(source_dir, files, title, disk, output_dir):
     """   """
     for f in files:
         fn = f[:-4]
@@ -55,9 +72,14 @@ def ripFiles(source_dir, files, title, disk):
         if len(f[5:-4].strip()) == 1:
             ofile = '0' + f[5:-4].strip()
 
-        outfile = '%s/converted/%s-%s-%s.mp3' % (source_dir,
-                                                title, disk, ofile)
-
+        #Make sure there's a place to write the files once they are done.
+        #os.path.expanduser('~')
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        outfile = '%s/%s-%s-%s.mp3' % (output_dir,
+                                       title, disk, fn)
+        #prog = [which('ffmpeg'), '-i', infile, '
+        #        -f', 'mp3', '-ab', '128k', outfile,]
         prog = [ffmpeg,
             '-i', infile,
             '-acodec', 'libmp3lame',
@@ -98,13 +120,13 @@ def main():
         help='Defaults to /web/music for source files.')
     p.add_option('--usage', '-?', action='store_true',
         help="Get usage examples.")
-#    p.add_option('--details', '-?', action='store_true',
-#        help="Get usage examples.")
+    p.add_option('--output', '-o',
+        default='/web/music/converted',
+        help="Where to write the output.")
 
     options, arguments = p.parse_args()
     source_dir = options.source
 
-    #import pdb; pdb.set_trace()
     if options.usage:
         print usage()
         sys.exit()
@@ -117,21 +139,24 @@ def main():
             print '\nWARNING: There is no source directory at: %s' % (source_dir)
             sys.exit()
 
-        #do any flv files exist?
-        files = [file for file in os.listdir(source_dir)
-            if fnmatch.fnmatch(file, '*.wav')]
-        if not len(getFiles(source_dir)):
+        #do any wav files exist?
+        files = getFiles(source_dir)
+        if not len(files):
             print '\nWARNING: There are no files in %s' % (source_dir)
+            sys.exit()
+
+        # is there an ffmpeg?
+        if not which('ffmpeg'):
+            print '\ALERT: There is no "ffmpeg" in the working $PATH.'
             sys.exit()
 
         logging.debug('##### Starting batch convert @ %s #####' % (tstamp()))
         ripFiles(source_dir=source_dir, files=files,
-            title=options.title, disk=options.disk)
+            title=options.title, disk=options.disk,
+            output_dir=options.output)
         logging.debug('##### Completed batch @ %s #####\n\n' % (tstamp()))
     else:
         print usage()
 
 if __name__ == '__main__':
     main()
-
-
