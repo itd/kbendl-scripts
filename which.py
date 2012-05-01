@@ -1,14 +1,10 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# encoding: utf-8
-"""
-An example pythonish 'which' implementation. I used it to check
-for the existence of, and get the path for, a specific executable.
-"""
-
 import os
 
 def which(program):
+    """
+    An example pythonish 'which' implementation. I used it to check
+    for the existence of, and get the path for, a specific executable.
+    """
     import os
     def is_exe(fpath):
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
