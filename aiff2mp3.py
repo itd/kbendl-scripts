@@ -42,7 +42,6 @@ def which(program):
 
 
 LOG_FILENAME = 'aiff2mp3-conversion.log'
-fpath = ''
 if not os.path.isfile(LOG_FILENAME):
     fpath = os.getcwd() + '/' + LOG_FILENAME
     LOG_FILENAME = fpath
