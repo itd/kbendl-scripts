@@ -1,169 +1,118 @@
-<<<<<<< HEAD
-# project-specific ignores
-_junk.txt
-
-=======
 ###########################################################
 ### Uber-generic .gitignore file. Edit to taste.
 ###########################################################
 
-
 ### Stuff local to this repo
-#
+### like project-specific ignores
+_junk.txt
+
 
 # editor and revision mgt stuff
->>>>>>> f13d76edb976b5e10afb96abee3e78aa953d1e16
 ###############################
-.svn
-.bzr
-.hgsvn
-*.komodoproject
-.hg
-.wpr
-<<<<<<< HEAD
-*.sublime-*
-=======
-.sublime*
-.idea
-.tmproj
 *.esproj
-nbproject
-*.sublime-project
-*.sublime-workspace
 *.komodoproject
-.komodotools
+*.komodotools
+*.sublime-*
+.bzr
+.hg
+.hgsvn
+.idea
+.svn
+.tmproj
+.wpr
 
-
->>>>>>> f13d76edb976b5e10afb96abee3e78aa953d1e16
-
-#build and log files
+# pythonish build and log files
 ###############################
-*.o
-*.pyc
-*.pyo
-*.out
-*.log
-*.tmp
-<<<<<<< HEAD
-=======
-*.tmp*
-*.mo
 *.egg
 *.EGG
 *.EGG-INFO
+*.log
+*.mo
+*.o
+*.out
+*.pyc
+*.pyo
+*.tmp
+*.tmp*
 build
-downloads
 dist
->>>>>>> f13d76edb976b5e10afb96abee3e78aa953d1e16
+downloads
+
+# plone/zope stuff
+#########################
+.installed.cfg
+.mr.developer.cfg
+adminPassword.txt
+bin
+develop-eggs
+eggs
+fake-eggs
+opt
+parts/*
+picked-versions.cfg
+src
+var/*
+version_pins.cfg
+WingDBG
+
 
 #Apple / Mac stuff
 ###############################
-.DS_Store
-._*
-.Trash
-<<<<<<< HEAD
-PloneController.app
-=======
 *.app
-.DS_Store
 ._*
-Thumbs.db
 .cache
+.DS_Store
 .project
 .settings
->>>>>>> f13d76edb976b5e10afb96abee3e78aa953d1e16
+.Trash
+PloneController.app
+Thumbs.db
 
 #crazy files
 ###############################
-META
-<<<<<<< HEAD
 build/
-=======
->>>>>>> f13d76edb976b5e10afb96abee3e78aa953d1e16
-tmp/
 junk
+META
+tmp/
 trash
 
-#  Binary stuff I don't want
+#  Binary stuff I don't usually want
 #  in a repo.
-###############################
-*.exe
-*.zip
-*.tgz
-*.tar
-*.bzip
-*.tbz
-*.gz
+####################################
 *.bin
+*.bzip
+*.exe
+*.gz
+*.tar
+*.tbz
+*.tgz
 *.zexp
+*.zip
 
 # obvious backup files
 ###############################
-*.orig
 *.bak
+*.orig
 *~
 ~*
 
 #database files
 ###############################
 *.db
-Data.f*
-<<<<<<< HEAD
-=======
 *.sqlite
+Data.f*
 
->>>>>>> f13d76edb976b5e10afb96abee3e78aa953d1e16
-
-# plone/zope stuff
-#########################
-version_pins.cfg
-fake-eggs
-develop-eggs
-var/*
-eggs
-parts/*
-opt
-<<<<<<< HEAD
-src
-bin
-=======
->>>>>>> f13d76edb976b5e10afb96abee3e78aa953d1e16
-*egg-info
-WingDBG
-.installed.cfg
-adminPassword.txt
-picked-versions.cfg
-<<<<<<< HEAD
-*.mo
-*.egg
-*.EGG
-*.EGG-INFO
-build
-downloads
-dist
-.mr.developer.cfg
-.hg
-.bzr
-.svn
-*.pyc
-*.pyo
-*.tmp*
-=======
-.mr.developer.cfg
-
-
-# Numerous always-ignore extensions
+# Misc ignorable extensions
+############################
 *.diff
 *.err
-*.orig
 *.log
+*.orig
 *.rej
+*.sass-cache
 *.swo
 *.swp
 *.vi
 *~
-*.sass-cache
 
 
-
->>>>>>> f13d76edb976b5e10afb96abee3e78aa953d1e16
