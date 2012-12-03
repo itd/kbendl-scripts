@@ -17,12 +17,7 @@ import os
 files = os.listdir('./')
 files = [f for f in files if 'jpg' in f]
 for fi in files:
-    fout = fi.split('.jpg')
-    fout = fout[0]
-    fout = fout.split('-')[1:]
+    fout = fi.split('-')[1:]
     fout = ''.join(fout)
-    fout = fout.split('_')
-    fout = ''.join(fout)
-    fout = '%s.jpg' % fout
+    fout = fout.replace('_','')
     os.rename(fi, fout)
-
