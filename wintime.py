@@ -84,26 +84,26 @@ def wintime_to_dt(wintime):
     dt = dt.replace(microsecond=(ns100 // 10))
     return dt
 
-def examples():
+def usage():
     content = """
     Decodes windows time to something human readable
-    Minimal command usage:\n
-    wintime.py 130236120000000000\n
-     2013-09-14\n
-\n
-    ...and optionally a format option for long or medium (-fl, -fm):\n
-    wintime.py -fl -t 130236120000000000\n
-    Sep. 14 2013  06:00:00\n
-\n
-    wintime.py -fm 130236120000000000\n
-    2013-09-14 06:00:00\n
+    Minimal command usage:
+    wintime.py 130236120000000000
+     2013-09-14
+
+    ...and optionally a format option for long or medium (-fl, -fm):
+    wintime.py -fl -t 130236120000000000
+    Sep. 14 2013  06:00:00
+
+    wintime.py -fm 130236120000000000
+    2013-09-14 06:00:00
 
     """
     return content
 
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser(description=examples(),
+    p = argparse.ArgumentParser(description=usage(),
                                 formatter_class=RawTextHelpFormatter)
     p.add_argument('-e', action="store_true", default=False, dest='ex')
     p.add_argument('-f', action="store", default='s', dest='format',
