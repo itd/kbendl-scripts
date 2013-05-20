@@ -1,27 +1,6 @@
-# Copyright (c) 2009, David Buxton <david@gasmark6.com>
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are
-# met:
-#
-#     * Redistributions of source code must retain the above copyright
-# notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above copyright
-# notice, this list of conditions and the following disclaimer in the
-# documentation and/or other materials provided with the distribution.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-# IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
-# TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-# PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-# HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
-# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# encoding: utf-8
 
 # Sourced from:
 #   http://reliablybroken.com/b/2011/09/free-software-ftw-updated-filetimes-py/
@@ -29,8 +8,10 @@
 """ Converts between Microsoft / ACtive Directory times
     and Python datetime objects.
 """
+import sys
 from datetime import datetime, timedelta, tzinfo
 from calendar import timegm
+import argparse
 
 # http://support.microsoft.com/kb/167296
 # How To Convert a UNIX time_t to a Win32 FILETIME or SYSTEMTIME
@@ -102,8 +83,51 @@ def wintime_to_dt(wintime):
     dt = dt.replace(microsecond=(ns100 // 10))
     return dt
 
+def examples():
+    content = """
+    Minimal command usage:
+    /wintime.py 130236120000000000
+        2013-09-14
+
+    ...and optionally a format option for long or medium (-fl, -fm):
+    wintime -fl -t 130236120000000000
+    Sep. 14 2013  06:00:00
+
+    ./wintime.py -fm 130236120000000000
+    2013-09-14 06:00:00
+    """
+    return content
 
 if __name__ == "__main__":
-    import doctest
+    p = argparse.ArgumentParser(
+        description='Decodes windows time to something human readable')
+    p.add_argument('-e', action="store_true", default='ex', dest='ex')
+    p.add_argument('-f', action="store", default='s', dest='format',
+        help="Options are 's', 'm' and 'l'",
+        choices=('s', 'm', 'l')
+        )
+    p.add_argument('windows_time_stamp', action="store_true", default='1')
+        #help='The AD or Microsoft time stamp, e.g., "130236120000000000"')
+    #print p.parse_args()
+    results = p.parse_args()
 
-    doctest.testmod()
+    if results.ex:
+        print examples()
+        sys.exit()
+
+    format = results.format
+    wt = results.windows_time_stamp
+    print wt
+    # if len(wt) is not 18:
+    #     print "The windows/AD time stamp entered should be 18 digits long."
+    #     sys.exit()
+
+    otime = wintime_to_dt(wt)
+    out = otime.strftime('%Y-%m-%d')
+    if format == 'm':
+        out = otime.strftime('%Y-%m-%d %H:%M:%S')
+    if format == 'l':
+        out = otime.strftime('%b. %d %Y  %H:%M:%S')
+
+    print out
+
