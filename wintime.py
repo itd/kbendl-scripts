@@ -12,6 +12,7 @@ import sys
 from datetime import datetime, timedelta, tzinfo
 from calendar import timegm
 import argparse
+from argparse import RawTextHelpFormatter
 
 # http://support.microsoft.com/kb/167296
 # How To Convert a UNIX time_t to a Win32 FILETIME or SYSTEMTIME
@@ -85,29 +86,32 @@ def wintime_to_dt(wintime):
 
 def examples():
     content = """
-    Minimal command usage:
-    /wintime.py 130236120000000000
-        2013-09-14
+    Decodes windows time to something human readable
+    Minimal command usage:\n
+    wintime.py 130236120000000000\n
+     2013-09-14\n
+\n
+    ...and optionally a format option for long or medium (-fl, -fm):\n
+    wintime.py -fl -t 130236120000000000\n
+    Sep. 14 2013  06:00:00\n
+\n
+    wintime.py -fm 130236120000000000\n
+    2013-09-14 06:00:00\n
 
-    ...and optionally a format option for long or medium (-fl, -fm):
-    wintime -fl -t 130236120000000000
-    Sep. 14 2013  06:00:00
-
-    ./wintime.py -fm 130236120000000000
-    2013-09-14 06:00:00
     """
     return content
 
+
 if __name__ == "__main__":
-    p = argparse.ArgumentParser(
-        description='Decodes windows time to something human readable')
-    p.add_argument('-e', action="store_true", default='ex', dest='ex')
+    p = argparse.ArgumentParser(description=examples(),
+                                formatter_class=RawTextHelpFormatter)
+    p.add_argument('-e', action="store_true", default=False, dest='ex')
     p.add_argument('-f', action="store", default='s', dest='format',
-        help="Options are 's', 'm' and 'l'",
+        help="options are: s, m, l - short, medium, or long format",
         choices=('s', 'm', 'l')
         )
-    p.add_argument('windows_time_stamp', action="store_true", default='1')
-        #help='The AD or Microsoft time stamp, e.g., "130236120000000000"')
+    p.add_argument('windows_time_stamp', action="store",
+        help='The AD or Microsoft time stamp, e.g., "130236120000000000"')
     #print p.parse_args()
     results = p.parse_args()
 
